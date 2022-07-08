@@ -1,0 +1,4 @@
+(library (name bidirectional_multimap_test)
+ (libraries base expect_test_helpers_core.expect_test_helpers_base
+  bidirectional_multimap)
+ (preprocess (pps ppx_jane)))
