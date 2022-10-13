@@ -52,8 +52,8 @@ module type With_sexp_of = sig
   type t [@@deriving sexp_of]
 end
 
-(** Defines [M(Left)(Right).t] and derives [compare, equal, hash, sexp, quickcheck]. *)
-module type Deriving = sig
+(** Defines [M(Left)(Right).t] and derives [compare, equal, hash, sexp]. *)
+module type Deriving_shared = sig
   type ('l, 'lc, 'r, 'rc) t
 
   module M (Left : With_comparator_witness) (Right : With_comparator_witness) : sig
@@ -104,6 +104,13 @@ module type Deriving = sig
     -> (module With_hash_fold with type t = 'r)
     -> ('l, _, 'r, _) t
     -> int
+end
+
+(** Adds [@@deriving quickcheck] support to [Deriving_shared]. *)
+module type Deriving = sig
+  type ('l, 'lc, 'r, 'rc) t
+
+  include Deriving_shared with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
 
   (** Used by [@@deriving quickcheck] *)
   val quickcheck_generator_m__t

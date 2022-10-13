@@ -552,7 +552,7 @@ module _ : module type of Bidirectional_map = struct
       end)
       ~f:(fun (t1, t2) ->
         match Bidirectional_map.merge t1 t2 with
-        | None ->
+        | Error _ ->
           require_error
             [%here]
             T.sexp_of_t
@@ -561,7 +561,7 @@ module _ : module type of Bidirectional_map = struct
                (module Key)
                (List.concat
                   [ Bidirectional_map.to_alist t1; Bidirectional_map.to_alist t2 ]))
-        | Some t ->
+        | Ok t ->
           Bidirectional_map.invariant ignore ignore t;
           require_equal
             [%here]

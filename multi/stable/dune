@@ -1,0 +1,3 @@
+(library (name bidirectional_multimap_stable)
+ (libraries bidirectional_map_interfaces_stable bidirectional_multimap core)
+ (preprocess (pps ppx_jane.kernel)))

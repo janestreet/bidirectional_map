@@ -18,7 +18,8 @@ module type Bidirectional_map = sig
 
   (** {1 Deriving} *)
 
-  (** Defines [M(Left)(Right).t] deriving [compare, equal, hash, quickcheck, sexp]. *)
+  (** Defines [M(Left)(Right).t] deriving [compare, equal, hash, quickcheck, sexp]. For
+      stable serializations, including [bin_io], see [Bidirectional_map_stable]. *)
   include
     Bidirectional_map_interfaces.Deriving
     with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
@@ -114,7 +115,7 @@ module type Bidirectional_map = sig
   val remove_binding : ('l, 'lc, 'r, 'rc) t -> 'l -> 'r -> ('l, 'lc, 'r, 'rc) t
 
   (** Produces a subset of [t]s bindings, keeping only the bindings satisfying [f]. *)
-  val filter : ('l, 'rc, 'r, 'rc) t -> f:('l -> 'r -> bool) -> ('l, 'rc, 'r, 'rc) t
+  val filter : ('l, 'lc, 'r, 'rc) t -> f:('l -> 'r -> bool) -> ('l, 'lc, 'r, 'rc) t
 
   (** Produces [filter t ~f, filter t ~f:(Fn.non f)]. *)
   val partition_tf
@@ -124,5 +125,8 @@ module type Bidirectional_map = sig
 
   (** Combines the bindings of two bidirectional maps, unless they contain conflicting
       bindings for a given left or right key. *)
-  val merge : ('l, 'lc, 'r, 'rc) t -> ('l, 'lc, 'r, 'rc) t -> ('l, 'lc, 'r, 'rc) t option
+  val merge
+    :  ('l, 'lc, 'r, 'rc) t
+    -> ('l, 'lc, 'r, 'rc) t
+    -> ('l, 'lc, 'r, 'rc) t Or_error.t
 end

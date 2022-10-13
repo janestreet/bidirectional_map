@@ -133,14 +133,23 @@ let filter t ~f =
 
 let merge t1 t2 =
   let small, large = if length t1 <= length t2 then t1, t2 else t2, t1 in
-  Map.fold_until
-    small.left_to_right
-    ~init:large
-    ~f:(fun ~key:l ~data:r t ->
+  let kept, dropped =
+    Map.fold small.left_to_right ~init:(large, []) ~f:(fun ~key:l ~data:r (t, dropped) ->
       match add_or_keep t l r with
-      | None -> Stop None
-      | Some t -> Continue t)
-    ~finish:Option.return
+      | None -> large, (l, r) :: dropped
+      | Some t -> t, dropped)
+  in
+  if List.is_empty dropped
+  then Ok kept
+  else (
+    let lc = Map.comparator kept.left_to_right in
+    let rc = Map.comparator kept.right_to_left in
+    Or_error.error_s
+      (Sexp.message
+         "Bidirectional_map.merge: incompatible bindings"
+         [ "dropped", List.Assoc.sexp_of_t lc.sexp_of_t rc.sexp_of_t (List.rev dropped)
+         ; "kept", List.Assoc.sexp_of_t lc.sexp_of_t rc.sexp_of_t (to_alist kept)
+         ]))
 ;;
 
 include struct
