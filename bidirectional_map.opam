@@ -13,6 +13,7 @@ depends: [
   "ocaml" {>= "4.10.0"}
   "dune" {>= "2.0.0"}
 ]
+available: arch != "arm32" & arch != "x86_32"
 synopsis: "A library for bidirectional maps and multimaps."
 description: "
 
