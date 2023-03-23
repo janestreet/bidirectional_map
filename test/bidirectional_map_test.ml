@@ -39,7 +39,8 @@ module _ : module type of Bidirectional_map = struct
          | Some (key, _) -> print_cr [%here] [%message "duplicate left key" (key : Key.t)]);
         (match List.find_a_dup alist ~compare:[%compare: _ * int] with
          | None -> ()
-         | Some (_, key) -> print_cr [%here] [%message "duplicate right key" (key : Key.t)]);
+         | Some (_, key) ->
+           print_cr [%here] [%message "duplicate right key" (key : Key.t)]);
         require [%here] (List.is_sorted_strictly alist ~compare:[%compare: Key.t * Key.t]))
   ;;
 
