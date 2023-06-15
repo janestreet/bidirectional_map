@@ -75,7 +75,7 @@ module _ : module type of Bidirectional_multimap = struct
           (Bidirectional_multimap.to_alist t
            |> List.map ~f:fst
            |> List.dedup_and_sort ~compare:Key.compare
-           |> List.length))
+           |> (List.length :> _ -> _)))
   ;;
 
   let number_of_right_keys = Bidirectional_multimap.number_of_right_keys
@@ -94,7 +94,7 @@ module _ : module type of Bidirectional_multimap = struct
           (Bidirectional_multimap.to_alist t
            |> List.map ~f:snd
            |> List.dedup_and_sort ~compare:Key.compare
-           |> List.length))
+           |> (List.length :> _ -> _)))
   ;;
 
   let is_empty = Bidirectional_multimap.is_empty
