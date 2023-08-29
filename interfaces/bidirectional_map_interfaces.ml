@@ -1,5 +1,5 @@
-(** Defines module types shared by [Bidirectional_map] and [Bidirectional_multimap] to
-    support ppx deriving for their types. *)
+(** Defines module types shared by [Bidirectional_map], [Bidirectional_many_to_one_map],
+    [Bidirectional_multimap] to support ppx deriving for their types. *)
 
 open Base
 
