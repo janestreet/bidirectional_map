@@ -116,8 +116,8 @@ module type Deriving = sig
   val quickcheck_generator_m__t
     :  (module With_quickcheck_generator with type t = 'l and type comparator_witness = 'lc)
     -> (module With_quickcheck_generator
-         with type t = 'r
-          and type comparator_witness = 'rc)
+          with type t = 'r
+           and type comparator_witness = 'rc)
     -> ('l, 'lc, 'r, 'rc) t Base_quickcheck.Generator.t
 
   (** Used by [@@deriving quickcheck] *)

@@ -17,19 +17,19 @@ module V1 = struct
   (* Serializations: implement via explicit round-trip to/from association list *)
 
   let sexp_of_m__t
-        (type l r)
-        (module Left : With_sexp_of with type t = l)
-        (module Right : With_sexp_of with type t = r)
-        t
+    (type l r)
+    (module Left : With_sexp_of with type t = l)
+    (module Right : With_sexp_of with type t = r)
+    t
     =
     [%sexp_of: (Left.t * Right.t) list] (Bidirectional_multimap.to_alist t)
   ;;
 
   let m__t_of_sexp
-        (type l lc r rc)
-        (module Left : With_of_sexp with type t = l and type comparator_witness = lc)
-        (module Right : With_of_sexp with type t = r and type comparator_witness = rc)
-        sexp
+    (type l lc r rc)
+    (module Left : With_of_sexp with type t = l and type comparator_witness = lc)
+    (module Right : With_of_sexp with type t = r and type comparator_witness = rc)
+    sexp
     =
     Bidirectional_multimap.of_alist
       (module Left)

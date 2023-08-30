@@ -664,5 +664,4 @@ module _ : module type of Bidirectional_map = struct
   let quickcheck_generator_m__t = Bidirectional_map.quickcheck_generator_m__t
   let quickcheck_observer_m__t = Bidirectional_map.quickcheck_observer_m__t
   let quickcheck_shrinker_m__t = Bidirectional_map.quickcheck_shrinker_m__t
-
 end

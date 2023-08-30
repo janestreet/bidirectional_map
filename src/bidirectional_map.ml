@@ -1,8 +1,8 @@
 open! Base
 
 module Binding = Comparator.Derived2 (struct
-    type ('a, 'b) t = 'a * 'b [@@deriving compare, sexp_of]
-  end)
+  type ('a, 'b) t = 'a * 'b [@@deriving compare, sexp_of]
+end)
 
 let binding_comparator_m (type l lc r rc) lm rm : _ Comparator.Module.t =
   let module L = (val (lm : (l, lc) Comparator.Module.t)) in
@@ -61,7 +61,7 @@ let of_alist_or_error lm rm lr_alist =
   let right_to_left = rl_alist |> Map.of_alist_or_error rm in
   Or_error.both left_to_right right_to_left
   |> Or_error.map ~f:(fun (left_to_right, right_to_left) ->
-    { bindings; left_to_right; right_to_left })
+       { bindings; left_to_right; right_to_left })
 ;;
 
 let empty lm rm =
@@ -160,19 +160,19 @@ include struct
   end
 
   let sexp_of_m__t
-        (type l r)
-        (module L : With_sexp_of with type t = l)
-        (module R : With_sexp_of with type t = r)
-        t
+    (type l r)
+    (module L : With_sexp_of with type t = l)
+    (module R : With_sexp_of with type t = r)
+    t
     =
     to_alist t |> [%sexp_of: (L.t * R.t) list]
   ;;
 
   let m__t_of_sexp
-        (type l lc r rc)
-        (module L : With_of_sexp with type t = l and type comparator_witness = lc)
-        (module R : With_of_sexp with type t = r and type comparator_witness = rc)
-        sexp
+    (type l lc r rc)
+    (module L : With_of_sexp with type t = l and type comparator_witness = lc)
+    (module R : With_of_sexp with type t = r and type comparator_witness = rc)
+    sexp
     =
     [%of_sexp: (L.t * R.t) list] sexp
     |> of_alist_or_error (module L) (module R)
@@ -180,31 +180,31 @@ include struct
   ;;
 
   let compare_m__t
-        (type l r)
-        (module L : With_compare with type t = l)
-        (module R : With_compare with type t = r)
-        t1
-        t2
+    (type l r)
+    (module L : With_compare with type t = l)
+    (module R : With_compare with type t = r)
+    t1
+    t2
     =
     Map.compare_m__t (module L) R.compare t1.left_to_right t2.left_to_right
   ;;
 
   let equal_m__t
-        (type l r)
-        (module L : With_equal with type t = l)
-        (module R : With_equal with type t = r)
-        t1
-        t2
+    (type l r)
+    (module L : With_equal with type t = l)
+    (module R : With_equal with type t = r)
+    t1
+    t2
     =
     Map.equal_m__t (module L) R.equal t1.left_to_right t2.left_to_right
   ;;
 
   let hash_fold_m__t
-        (type l r)
-        (module L : With_hash_fold with type t = l)
-        (module R : With_hash_fold with type t = r)
-        hash_state
-        t
+    (type l r)
+    (module L : With_hash_fold with type t = l)
+    (module R : With_hash_fold with type t = r)
+    hash_state
+    t
     =
     Map.hash_fold_m__t (module L) R.hash_fold_t hash_state t.left_to_right
   ;;
@@ -215,37 +215,37 @@ include struct
     open Base_quickcheck
 
     let quickcheck_generator_m__t
-          (type l lc r rc)
-          (module L : With_quickcheck_generator
-            with type t = l
-             and type comparator_witness = lc)
-          (module R : With_quickcheck_generator
-            with type t = r
-             and type comparator_witness = rc)
+      (type l lc r rc)
+      (module L : With_quickcheck_generator
+        with type t = l
+         and type comparator_witness = lc)
+      (module R : With_quickcheck_generator
+        with type t = r
+         and type comparator_witness = rc)
       =
       Generator.list (Generator.both L.quickcheck_generator R.quickcheck_generator)
       |> Generator.map ~f:(fun alist ->
-        (* Generate a [t] with as many bindings from [alist] as possible, rather than
+           (* Generate a [t] with as many bindings from [alist] as possible, rather than
            choosing a new alist if some bindings overlap. *)
-        List.fold
-          alist
-          ~init:(empty (module L) (module R))
-          ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
+           List.fold
+             alist
+             ~init:(empty (module L) (module R))
+             ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
     ;;
 
     let quickcheck_observer_m__t
-          (type l r)
-          (module L : With_quickcheck_observer with type t = l)
-          (module R : With_quickcheck_observer with type t = r)
+      (type l r)
+      (module L : With_quickcheck_observer with type t = l)
+      (module R : With_quickcheck_observer with type t = r)
       =
       Observer.list (Observer.both L.quickcheck_observer R.quickcheck_observer)
       |> Observer.unmap ~f:to_alist
     ;;
 
     let quickcheck_shrinker_m__t
-          (type l r)
-          (module L : With_quickcheck_shrinker with type t = l)
-          (module R : With_quickcheck_shrinker with type t = r)
+      (type l r)
+      (module L : With_quickcheck_shrinker with type t = l)
+      (module R : With_quickcheck_shrinker with type t = r)
       =
       Shrinker.both
         Shrinker.atomic

@@ -753,5 +753,4 @@ module _ : module type of Bidirectional_multimap = struct
   let quickcheck_generator_m__t = Bidirectional_multimap.quickcheck_generator_m__t
   let quickcheck_observer_m__t = Bidirectional_multimap.quickcheck_observer_m__t
   let quickcheck_shrinker_m__t = Bidirectional_multimap.quickcheck_shrinker_m__t
-
 end

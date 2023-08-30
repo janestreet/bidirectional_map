@@ -21,7 +21,7 @@ module type Bidirectional_multimap = sig
       stable serializations, including [bin_io], see [Bidirectional_multimap_stable]. *)
   include
     Bidirectional_map_interfaces.Deriving
-    with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
+      with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
   (** @inline *)
 
   (** {1 Accessors} *)
