@@ -1,2 +1,4 @@
-(library (name bidirectional_map_interfaces_stable)
- (libraries bidirectional_map_interfaces core) (preprocess no_preprocessing))
+(library
+ (name bidirectional_map_interfaces_stable)
+ (libraries bidirectional_map_interfaces core)
+ (preprocess no_preprocessing))

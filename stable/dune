@@ -1,3 +1,5 @@
-(library (name bidirectional_map_stable)
+(library
+ (name bidirectional_map_stable)
  (libraries bidirectional_map bidirectional_map_interfaces_stable core)
- (preprocess (pps ppx_jane.kernel)))
+ (preprocess
+  (pps ppx_jane.kernel)))
