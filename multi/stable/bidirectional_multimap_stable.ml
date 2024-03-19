@@ -37,6 +37,80 @@ module V1 = struct
       ([%of_sexp: (Left.t * Right.t) list] sexp)
   ;;
 
+  let bin_shape_caller_identity =
+    Bin_prot.Shape.Uuid.of_string "75a4dad2-5fee-42ee-bb74-0b30343e7766"
+  ;;
+
+  let bin_shape_m__t
+    (type l r)
+    (module Left : With_bin_io with type t = l)
+    (module Right : With_bin_io with type t = r)
+    =
+    Bin_shape.annotate bin_shape_caller_identity [%bin_shape: (Left.t * Right.t) list]
+  ;;
+
+  let bin_size_m__t
+    (type l r)
+    (module Left : With_bin_io with type t = l)
+    (module Right : With_bin_io with type t = r)
+    t
+    =
+    [%bin_size: (Left.t * Right.t) list] (Bidirectional_multimap.to_alist t)
+  ;;
+
+  let bin_write_m__t
+    (type l r)
+    (module Left : With_bin_io with type t = l)
+    (module Right : With_bin_io with type t = r)
+    ~pos
+    buf
+    t
+    =
+    [%bin_write: (Left.t * Right.t) list] ~pos buf (Bidirectional_multimap.to_alist t)
+  ;;
+
+  let bin_read_m__t
+    (type l lc r rc)
+    (module Left : With_bin_io with type t = l and type comparator_witness = lc)
+    (module Right : With_bin_io with type t = r and type comparator_witness = rc)
+    ~pos_ref
+    buf
+    =
+    [%bin_read: (Left.t * Right.t) list] buf ~pos_ref
+    |> Bidirectional_multimap.of_alist (module Left) (module Right)
+  ;;
+
+  let __bin_read_m__t__
+    (type l lc r rc)
+    (module _ : With_bin_io with type t = l and type comparator_witness = lc)
+    (module _ : With_bin_io with type t = r and type comparator_witness = rc)
+    ~pos_ref
+    _
+    _
+    =
+    Bin_prot.Common.raise_variant_wrong_type "bidirectional_multimap_stable" !pos_ref
+  ;;
+
+  let stable_witness_m__t
+    (type l lc r rc)
+    (module Left : With_stable_witness with type t = l and type comparator_witness = lc)
+    (module Right : With_stable_witness with type t = r and type comparator_witness = rc)
+    =
+    let open Stable_witness.Export in
+    (* There is no current function which combines two stable witnesses into a
+       tuple stable witness, so we use [Stable_witness.assert_stable].*)
+    let (tuple_stable : (Left.t * Right.t) Stable_witness.t) =
+      let (_ : Left.t Stable_witness.t) = Left.stable_witness in
+      let (_ : Right.t Stable_witness.t) = Right.stable_witness in
+      Stable_witness.assert_stable
+    in
+    let list_stable = stable_witness_list tuple_stable in
+    Stable_witness.of_serializable
+      list_stable
+      (Bidirectional_multimap.of_alist (module Left) (module Right))
+      Bidirectional_multimap.to_alist
+  ;;
+
   module Provide_bin_io (Left : With_bin_io) (Right : With_bin_io) :
     Core.Binable.S with type t := M(Left)(Right).t =
     Binable.Of_binable.V2
@@ -52,8 +126,6 @@ module V1 = struct
           Bidirectional_multimap.of_alist (module Left) (module Right) alist
         ;;
 
-        let caller_identity =
-          Bin_prot.Shape.Uuid.of_string "75a4dad2-5fee-42ee-bb74-0b30343e7766"
-        ;;
+        let caller_identity = bin_shape_caller_identity
       end)
 end

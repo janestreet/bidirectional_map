@@ -130,9 +130,9 @@ module type Bidirectional_multimap = sig
 
   (** Produces [filter t ~f, filter t ~f:(Fn.non f)]. *)
   val partition_tf
-    :  ('l, 'rc, 'r, 'rc) t
+    :  ('l, 'lc, 'r, 'rc) t
     -> f:('l -> 'r -> bool)
-    -> ('l, 'rc, 'r, 'rc) t * ('l, 'rc, 'r, 'rc) t
+    -> ('l, 'lc, 'r, 'rc) t * ('l, 'lc, 'r, 'rc) t
 
   (** Combines the bindings of two bidirectional multi-maps. *)
   val merge : ('l, 'lc, 'r, 'rc) t -> ('l, 'lc, 'r, 'rc) t -> ('l, 'lc, 'r, 'rc) t
