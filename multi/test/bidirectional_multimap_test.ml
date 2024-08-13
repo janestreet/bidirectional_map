@@ -28,7 +28,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -37,23 +36,19 @@ module _ : module type of Bidirectional_multimap = struct
         (match List.find_a_dup alist ~compare:[%compare: int * int] with
          | None -> ()
          | Some (left_key, right_key) ->
-           print_cr
-             [%here]
-             [%message "duplicate binding" (left_key : Key.t) (right_key : Key.t)]);
-        require [%here] (List.is_sorted alist ~compare:[%compare: Key.t * Key.t]))
+           print_cr [%message "duplicate binding" (left_key : Key.t) (right_key : Key.t)]);
+        require (List.is_sorted alist ~compare:[%compare: Key.t * Key.t]))
   ;;
 
   let length = Bidirectional_multimap.length
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Int)
           (Bidirectional_multimap.length t)
           (List.length (Bidirectional_multimap.to_alist t)))
@@ -63,13 +58,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Int)
           (Bidirectional_multimap.number_of_left_keys t)
           (Bidirectional_multimap.to_alist t
@@ -82,13 +75,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Int)
           (Bidirectional_multimap.number_of_right_keys t)
           (Bidirectional_multimap.to_alist t
@@ -101,13 +92,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.is_empty t)
           (List.is_empty (Bidirectional_multimap.to_alist t)))
@@ -117,14 +106,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l, r) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.mem_binding t l r)
           (List.mem alist (l, r) ~equal:[%equal: Key.t * Key.t]))
@@ -136,14 +123,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module Int)
           (Bidirectional_multimap.number_of_bindings_for_left_key t l)
           (List.count alist ~f:(fun (key, _) -> Key.equal key l)))
@@ -155,14 +140,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, r) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module Int)
           (Bidirectional_multimap.number_of_bindings_for_right_key t r)
           (List.count alist ~f:(fun (_, key) -> Key.equal key r)))
@@ -172,14 +155,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.mem_left t l)
           (List.exists alist ~f:(fun (key, _) -> Key.equal key l)))
@@ -189,14 +170,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, r) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.mem_right t r)
           (List.exists alist ~f:(fun (_, key) -> Key.equal key r)))
@@ -206,14 +185,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t [@@deriving equal, sexp_of]
           end)
@@ -227,14 +204,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, r) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t [@@deriving equal, sexp_of]
           end)
@@ -248,14 +223,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t option [@@deriving equal, sexp_of]
           end)
@@ -272,14 +245,12 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, r) ->
         let alist = to_alist t in
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t option [@@deriving equal, sexp_of]
           end)
@@ -296,13 +267,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module struct
             type t = Key.t list [@@deriving equal, sexp_of]
           end)
@@ -316,13 +285,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module struct
             type t = Key.t list [@@deriving equal, sexp_of]
           end)
@@ -335,13 +302,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t Map.M(Key).t [@@deriving equal, sexp_of]
           end)
@@ -355,13 +320,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module struct
             type t = Set.M(Key).t Map.M(Key).t [@@deriving equal, sexp_of]
           end)
@@ -376,7 +339,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -384,7 +346,6 @@ module _ : module type of Bidirectional_multimap = struct
         let queue = Queue.create () in
         Bidirectional_multimap.iter t ~f:(fun l r -> Queue.enqueue queue (l, r));
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -396,13 +357,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -414,13 +373,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.for_all t ~f:(fun l r -> l <= r))
           (List.for_all (Bidirectional_multimap.to_alist t) ~f:(fun (l, r) -> l <= r)))
@@ -430,13 +387,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun t ->
         require_equal
-          [%here]
           (module Bool)
           (Bidirectional_multimap.exists t ~f:(fun l r -> l <= r))
           (List.exists (Bidirectional_multimap.to_alist t) ~f:(fun (l, r) -> l <= r)))
@@ -446,7 +401,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -460,10 +414,9 @@ module _ : module type of Bidirectional_multimap = struct
   let%expect_test _ =
     let t = Bidirectional_multimap.empty (module Key) (module Key) in
     print_s [%sexp (t : T.t)];
-    require [%here] (Bidirectional_multimap.is_empty t);
-    require_equal [%here] (module Int) (Bidirectional_multimap.length t) 0;
-    require_does_not_raise [%here] (fun () ->
-      Bidirectional_multimap.invariant ignore ignore t);
+    require (Bidirectional_multimap.is_empty t);
+    require_equal (module Int) (Bidirectional_multimap.length t) 0;
+    require_does_not_raise (fun () -> Bidirectional_multimap.invariant ignore ignore t);
     [%expect {| () |}]
   ;;
 
@@ -471,7 +424,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = (Key.t * Key.t) list [@@deriving quickcheck, sexp_of]
       end)
@@ -479,7 +431,6 @@ module _ : module type of Bidirectional_multimap = struct
         let t = Bidirectional_multimap.of_alist (module Key) (module Key) alist in
         Bidirectional_multimap.invariant ignore ignore t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -491,17 +442,15 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l, r) ->
         match Bidirectional_multimap.add t l r with
-        | None -> require [%here] (Bidirectional_multimap.mem_binding t l r)
+        | None -> require (Bidirectional_multimap.mem_binding t l r)
         | Some modified_t ->
           Bidirectional_multimap.invariant ignore ignore modified_t;
           require_equal
-            [%here]
             (module struct
               type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
             end)
@@ -514,7 +463,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
@@ -522,7 +470,6 @@ module _ : module type of Bidirectional_multimap = struct
         let modified_t = Bidirectional_multimap.set t l r in
         Bidirectional_multimap.invariant ignore ignore modified_t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -536,7 +483,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
@@ -544,7 +490,6 @@ module _ : module type of Bidirectional_multimap = struct
         let modified_t = Bidirectional_multimap.remove_left t l in
         Bidirectional_multimap.invariant ignore ignore modified_t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -557,7 +502,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
@@ -565,7 +509,6 @@ module _ : module type of Bidirectional_multimap = struct
         let modified_t = Bidirectional_multimap.remove_right t r in
         Bidirectional_multimap.invariant ignore ignore modified_t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -578,7 +521,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
@@ -586,7 +528,6 @@ module _ : module type of Bidirectional_multimap = struct
         let modified_t = Bidirectional_multimap.remove_binding t l r in
         Bidirectional_multimap.invariant ignore ignore modified_t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -599,7 +540,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -607,7 +547,6 @@ module _ : module type of Bidirectional_multimap = struct
         let modified_t = Bidirectional_multimap.filter t ~f:(fun l r -> l <= r) in
         Bidirectional_multimap.invariant ignore ignore modified_t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -620,7 +559,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -629,7 +567,6 @@ module _ : module type of Bidirectional_multimap = struct
         Bidirectional_multimap.invariant ignore ignore keeps;
         Bidirectional_multimap.invariant ignore ignore drops;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list * (Key.t * Key.t) list
             [@@deriving equal, sexp_of]
@@ -643,7 +580,6 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * T.t [@@deriving quickcheck, sexp_of]
       end)
@@ -651,7 +587,6 @@ module _ : module type of Bidirectional_multimap = struct
         let t = Bidirectional_multimap.merge t1 t2 in
         Bidirectional_multimap.invariant ignore ignore t;
         require_equal
-          [%here]
           (module struct
             type t = (Key.t * Key.t) list [@@deriving equal, sexp_of]
           end)
@@ -670,13 +605,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module T)
       ~f:(fun t ->
         let sexp = T.sexp_of_t t in
         let round_trip = T.t_of_sexp sexp in
         require_equal
-          [%here]
           (module struct
             type t = T.t [@@deriving equal, sexp_of]
           end)
@@ -688,19 +621,16 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l, r) ->
-        require [%here] (T.equal t t);
+        require (T.equal t t);
         require_equal
-          [%here]
           (module Bool)
           (T.equal t (Bidirectional_multimap.set t l r))
           (Bidirectional_multimap.mem_binding t l r);
         require_equal
-          [%here]
           (module Bool)
           (T.equal t (Bidirectional_multimap.remove_binding t l r))
           (not (Bidirectional_multimap.mem_binding t l r)))
@@ -710,13 +640,11 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * T.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t1, t2) ->
         require_equal
-          [%here]
           (module Ordering)
           (Ordering.of_int (T.compare t1 t2))
           (Ordering.of_int
@@ -732,19 +660,16 @@ module _ : module type of Bidirectional_multimap = struct
 
   let%expect_test _ =
     quickcheck_m
-      [%here]
       (module struct
         type t = T.t * Key.t * Key.t [@@deriving quickcheck, sexp_of]
       end)
       ~f:(fun (t, l, r) ->
-        require_equal [%here] (module Int) (T.hash t) (T.hash t);
+        require_equal (module Int) (T.hash t) (T.hash t);
         require_equal
-          [%here]
           (module Bool)
           (T.hash t = T.hash (Bidirectional_multimap.set t l r))
           (Bidirectional_multimap.mem_binding t l r);
         require_equal
-          [%here]
           (module Bool)
           (T.hash t = T.hash (Bidirectional_multimap.remove_binding t l r))
           (not (Bidirectional_multimap.mem_binding t l r)))

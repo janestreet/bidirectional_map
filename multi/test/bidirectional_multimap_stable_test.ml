@@ -53,7 +53,6 @@ end = struct
         |}]
     in
     print_and_check_stable_type
-      [%here]
       (module struct
         type t = V1.M(Int)(Int).t [@@deriving compare, sexp]
 
@@ -68,7 +67,6 @@ end = struct
     end
     in
     print_and_check_stable_type
-      [%here]
       (module struct
         type t = V1.M(Stable_int)(Stable_int).t
         [@@deriving bin_io, compare, sexp, stable_witness]

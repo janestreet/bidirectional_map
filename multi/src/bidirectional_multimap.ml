@@ -1,8 +1,8 @@
 open! Base
 
 module Binding = Comparator.Derived2 (struct
-  type ('a, 'b) t = 'a * 'b [@@deriving compare, sexp_of]
-end)
+    type ('a, 'b) t = 'a * 'b [@@deriving compare, sexp_of]
+  end)
 
 let binding_comparator_m (type l lc r rc) lm rm : _ Comparator.Module.t =
   let module L = (val (lm : (l, lc) Comparator.Module.t)) in
@@ -261,12 +261,12 @@ include struct
       =
       Generator.list (Generator.both L.quickcheck_generator R.quickcheck_generator)
       |> Generator.map ~f:(fun alist ->
-           (* Generate a [t] with as many bindings from [alist] as possible, rather than
+        (* Generate a [t] with as many bindings from [alist] as possible, rather than
            choosing a new alist if some bindings overlap. *)
-           List.fold
-             alist
-             ~init:(empty (module L) (module R))
-             ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
+        List.fold
+          alist
+          ~init:(empty (module L) (module R))
+          ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
     ;;
 
     let quickcheck_observer_m__t

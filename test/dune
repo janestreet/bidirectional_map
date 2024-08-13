@@ -1,6 +1,7 @@
 (library
  (name bidirectional_map_test)
  (libraries base core bidirectional_map bidirectional_map_stable
-   expect_test_helpers_core.expect_test_helpers_base expect_test_helpers_core)
+   expect_test_helpers_core.expect_test_helpers_base expect_test_helpers_core
+   ppx_stable_witness.stable_witness)
  (preprocess
   (pps ppx_jane)))
