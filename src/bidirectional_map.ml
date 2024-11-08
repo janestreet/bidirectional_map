@@ -111,6 +111,7 @@ let set t l r =
     add_unchecked t l r)
 ;;
 
+let singleton lm rm l r = add_unchecked (empty lm rm) l r
 let iter t ~f = Map.iteri t.left_to_right ~f:(fun ~key:l ~data:r -> f l r)
 
 let fold t ~init ~f =

@@ -301,6 +301,21 @@ module _ : module type of Bidirectional_map = struct
     [%expect {| () |}]
   ;;
 
+  let singleton = Bidirectional_map.singleton
+
+  let%expect_test _ =
+    quickcheck_m
+      (module struct
+        type t = Key.t * Key.t [@@deriving quickcheck, sexp_of]
+      end)
+      ~f:(fun (l, r) ->
+        let t = Bidirectional_map.singleton (module Key) (module Key) l r in
+        require (not (Bidirectional_map.is_empty t));
+        require_equal (module Int) (Bidirectional_map.length t) 1;
+        require (Bidirectional_map.mem_left t l && Bidirectional_map.mem_right t r);
+        require_does_not_raise (fun () -> Bidirectional_map.invariant ignore ignore t))
+  ;;
+
   let of_alist_or_error = Bidirectional_map.of_alist_or_error
 
   let%expect_test _ =

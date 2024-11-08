@@ -142,6 +142,7 @@ let remove_right t r =
 ;;
 
 let set t l r = if mem_binding t l r then t else add_unchecked t l r
+let singleton lm rm l r = add_unchecked (empty lm rm) l r
 
 let iter t ~f =
   Map.iteri t.left_to_right ~f:(fun ~key:l ~data:rs -> Set.iter rs ~f:(fun r -> f l r))

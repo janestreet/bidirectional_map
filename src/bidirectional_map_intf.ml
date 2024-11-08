@@ -86,6 +86,14 @@ module type Bidirectional_map = sig
     -> ('r, 'rc) Comparator.Module.t
     -> ('l, 'lc, 'r, 'rc) t
 
+  (** Constructs a bidirectional map with the given pairing. *)
+  val singleton
+    :  ('l, 'lc) Comparator.Module.t
+    -> ('r, 'rc) Comparator.Module.t
+    -> 'l
+    -> 'r
+    -> ('l, 'lc, 'r, 'rc) t
+
   (** Constructs a bidirectional map with the given pairings, if there are no duplicate
       left or right keys. *)
   val of_alist_or_error

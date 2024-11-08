@@ -103,6 +103,14 @@ module type Bidirectional_multimap = sig
     -> ('r, 'rc) Comparator.Module.t
     -> ('l, 'lc, 'r, 'rc) t
 
+  (** Constructs a bidirectional multi-map with the given pairing. *)
+  val singleton
+    :  ('l, 'lc) Comparator.Module.t
+    -> ('r, 'rc) Comparator.Module.t
+    -> 'l
+    -> 'r
+    -> ('l, 'lc, 'r, 'rc) t
+
   (** Constructs a bidirectional multi-map with the given pairings. *)
   val of_alist
     :  ('l, 'lc) Comparator.Module.t
