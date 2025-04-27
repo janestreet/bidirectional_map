@@ -4,4 +4,4 @@
    bidirectional_map_interfaces_stable bin_prot.shape core
    ppx_stable_witness.stable_witness)
  (preprocess
-  (pps ppx_jane.kernel)))
+  (pps ppx_jane)))
