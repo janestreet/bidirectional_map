@@ -148,8 +148,16 @@ let merge t1 t2 =
     Or_error.error_s
       (Sexp.message
          "Bidirectional_map.merge: incompatible bindings"
-         [ "dropped", List.Assoc.sexp_of_t lc.sexp_of_t rc.sexp_of_t (List.rev dropped)
-         ; "kept", List.Assoc.sexp_of_t lc.sexp_of_t rc.sexp_of_t (to_alist kept)
+         [ ( "dropped"
+           , List.Assoc.sexp_of_t
+               (Comparator.sexp_of_t lc)
+               (Comparator.sexp_of_t rc)
+               (List.rev dropped) )
+         ; ( "kept"
+           , List.Assoc.sexp_of_t
+               (Comparator.sexp_of_t lc)
+               (Comparator.sexp_of_t rc)
+               (to_alist kept) )
          ]))
 ;;
 
