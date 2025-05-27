@@ -1,7 +1,7 @@
 open! Base
 
 module Binding = Comparator.Derived2 (struct
-    type ('a, 'b) t = 'a * 'b [@@deriving compare, sexp_of]
+    type ('a, 'b) t = 'a * 'b [@@deriving compare ~localize, sexp_of]
   end)
 
 let binding_comparator_m (type l lc r rc) lm rm : _ Comparator.Module.t =
