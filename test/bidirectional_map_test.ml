@@ -539,17 +539,15 @@ module _ : module type of Bidirectional_map = struct
   let m__t_of_sexp = Bidirectional_map.m__t_of_sexp
 
   let%expect_test _ =
-    quickcheck_m
-      (module T)
-      ~f:(fun t ->
-        let sexp = T.sexp_of_t t in
-        let round_trip = T.t_of_sexp sexp in
-        require_equal
-          (module struct
-            type t = T.t [@@deriving equal, sexp_of]
-          end)
-          round_trip
-          t)
+    quickcheck_m (module T) ~f:(fun t ->
+      let sexp = T.sexp_of_t t in
+      let round_trip = T.t_of_sexp sexp in
+      require_equal
+        (module struct
+          type t = T.t [@@deriving equal, sexp_of]
+        end)
+        round_trip
+        t)
   ;;
 
   let equal_m__t = Bidirectional_map.equal_m__t
