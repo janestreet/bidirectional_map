@@ -1,8 +1,12 @@
 open! Base
 
-module Binding = Comparator.Derived2 (struct
-    type ('a, 'b) t = 'a * 'b [@@deriving compare ~localize, sexp_of]
-  end)
+module Binding = struct
+  type ('a, 'b) t = 'a * 'b
+
+  include Comparator.Derived2 [@modality portable] (struct
+      type ('a, 'b) t = 'a * 'b [@@deriving compare ~localize, sexp_of]
+    end)
+end
 
 let binding_comparator_m (type l lc r rc) lm rm : _ Comparator.Module.t =
   let module L = (val (lm : (l, lc) Comparator.Module.t)) in
@@ -27,6 +31,8 @@ type ('l, 'lc, 'r, 'rc) t =
   ; left_to_right : ('l, 'r, 'lc) Map.t
   ; right_to_left : ('r, 'l, 'rc) Map.t
   }
+
+type 'a workaround_to_make_the_above_typecheck
 
 let invariant l_invariant r_invariant { bindings; left_to_right; right_to_left } =
   assert (Set.invariants bindings);

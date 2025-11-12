@@ -1,6 +1,6 @@
 (library
  (name bidirectional_multimap_test)
- (libraries base core bidirectional_multimap bidirectional_multimap_stable
+ (libraries base bidirectional_multimap bidirectional_multimap_stable core
    expect_test_helpers_core.expect_test_helpers_base expect_test_helpers_core
    ppx_stable_witness.stable_witness)
  (preprocess

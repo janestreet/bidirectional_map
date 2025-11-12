@@ -39,7 +39,7 @@ module type S = sig
     :  (module With_bin_io with type t = 'l)
     -> (module With_bin_io with type t = 'r)
     -> pos:int
-    -> Bin_prot.Common.buf
+    -> Bin_prot.Common.buf @ local
     -> ('l, _, 'r, _) t
     -> int
 
@@ -47,16 +47,16 @@ module type S = sig
   val bin_read_m__t
     :  (module With_bin_io with type t = 'l and type comparator_witness = 'lc)
     -> (module With_bin_io with type t = 'r and type comparator_witness = 'rc)
-    -> pos_ref:int ref
-    -> Bin_prot.Common.buf
+    -> pos_ref:int ref @ local
+    -> Bin_prot.Common.buf @ local
     -> ('l, 'lc, 'r, 'rc) t
 
   (** Used by [@@deriving bin_io] *)
   val __bin_read_m__t__
     :  (module With_bin_io with type t = 'l and type comparator_witness = 'lc)
     -> (module With_bin_io with type t = 'r and type comparator_witness = 'rc)
-    -> pos_ref:int ref
-    -> Bin_prot.Common.buf
+    -> pos_ref:int ref @ local
+    -> Bin_prot.Common.buf @ local
     -> int
     -> ('l, 'lc, 'r, 'rc) t
 

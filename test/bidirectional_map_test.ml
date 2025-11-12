@@ -20,7 +20,12 @@ end
 module _ : module type of Bidirectional_map = struct
   (** Type *)
 
+  module Binding = Bidirectional_map.Binding
+
   type ('l, 'lc, 'r, 'rc) t = ('l, 'lc, 'r, 'rc) Bidirectional_map.t
+
+  type 'a workaround_to_make_the_above_typecheck =
+    'a Bidirectional_map.workaround_to_make_the_above_typecheck
 
   (** Accessors *)
 

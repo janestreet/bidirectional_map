@@ -10,10 +10,25 @@
 
 open! Base
 
-module type Bidirectional_multimap = sig
+module type Bidirectional_multimap = sig @@ portable
+  (** An internal type, exposed to express the necessary [with] bounds on [t] below. *)
+  module Binding : Comparator.Derived2 [@mode portable]
+
   (** Type of a bidirectional multi-map with ['l] left keys, ['r] right keys, and ['lc]
       and ['rc] comparator witness types, respectively. *)
-  type ('l, 'lc, 'r, 'rc) t
+  type ('l
+       , 'lc
+       , 'r
+       , 'rc)
+       t :
+       immutable_data
+       with 'l
+       with 'r
+       with ('l, 'lc) Comparator.t
+       with ('r, 'rc) Comparator.t
+       with ('l * 'r, ('lc, 'rc) Binding.comparator_witness) Comparator.t
+
+  type 'a workaround_to_make_the_above_typecheck
 
   (** {1 Deriving} *)
 
