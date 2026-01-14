@@ -20,7 +20,12 @@ end
 module _ : module type of Bidirectional_multimap = struct
   (** Type *)
 
+  module Binding = Bidirectional_multimap.Binding
+
   type ('l, 'lc, 'r, 'rc) t = ('l, 'lc, 'r, 'rc) Bidirectional_multimap.t
+
+  type 'a workaround_to_make_the_above_typecheck =
+    'a Bidirectional_multimap.workaround_to_make_the_above_typecheck
 
   (** Accessors *)
 

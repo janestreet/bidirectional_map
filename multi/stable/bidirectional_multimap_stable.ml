@@ -97,8 +97,8 @@ module V1 = struct
     (module Right : With_stable_witness with type t = r and type comparator_witness = rc)
     =
     let open Stable_witness.Export in
-    (* There is no current function which combines two stable witnesses into a
-       tuple stable witness, so we use [Stable_witness.assert_stable].*)
+    (* There is no current function which combines two stable witnesses into a tuple
+       stable witness, so we use [Stable_witness.assert_stable]. *)
     let (tuple_stable : (Left.t * Right.t) Stable_witness.t) =
       let (_ : Left.t Stable_witness.t) = Left.stable_witness in
       let (_ : Right.t Stable_witness.t) = Right.stable_witness in
