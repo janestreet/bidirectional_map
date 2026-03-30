@@ -5,8 +5,8 @@ open Base
 
 (** Module types used by [Deriving], below. *)
 
-module type With_compare = sig
-  type t [@@deriving compare]
+module type%template [@mode m = (local, global)] With_compare = sig
+  type t [@@deriving compare [@mode.explicit m]]
 end
 
 module type With_comparator_witness = sig
@@ -14,8 +14,8 @@ module type With_comparator_witness = sig
   type comparator_witness
 end
 
-module type With_equal = sig
-  type t [@@deriving equal]
+module type%template [@mode m = (local, global)] With_equal = sig
+  type t [@@deriving equal [@mode.explicit m]]
 end
 
 module type With_hash_fold = sig
