@@ -16,7 +16,7 @@ module type With_stable_witness = sig
   include Comparator.S with type t := t
 end
 
-module type S = sig
+module type S = sig @@ portable
   type ('l, 'lc, 'r, 'rc) t
 
   include Deriving_shared with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
