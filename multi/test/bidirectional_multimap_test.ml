@@ -695,7 +695,18 @@ module _ : module type of Bidirectional_multimap = struct
           (not (Bidirectional_multimap.mem_binding t l r)))
   ;;
 
-  let quickcheck_generator_m__t = Bidirectional_multimap.quickcheck_generator_m__t
-  let quickcheck_observer_m__t = Bidirectional_multimap.quickcheck_observer_m__t
-  let quickcheck_shrinker_m__t = Bidirectional_multimap.quickcheck_shrinker_m__t
+  [%%template
+  [@@@mode.default p = (portable, nonportable)]
+
+  let quickcheck_generator_m__t =
+    (Bidirectional_multimap.quickcheck_generator_m__t [@mode p])
+  ;;
+
+  let quickcheck_observer_m__t =
+    (Bidirectional_multimap.quickcheck_observer_m__t [@mode p])
+  ;;
+
+  let quickcheck_shrinker_m__t =
+    (Bidirectional_multimap.quickcheck_shrinker_m__t [@mode p])
+  ;;]
 end

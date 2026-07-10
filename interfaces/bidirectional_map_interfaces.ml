@@ -112,9 +112,13 @@ module type Deriving = sig
 
   include Deriving_shared with type ('l, 'lc, 'r, 'rc) t := ('l, 'lc, 'r, 'rc) t
 
+  [%%template:
+  [@@@mode.default p = (portable, nonportable)]
+
   (** Used by [@@deriving quickcheck] *)
   val quickcheck_generator_m__t
-    :  (module With_quickcheck_generator with type t = 'l and type comparator_witness = 'lc)
+    : 'l 'lc 'r 'rc.
+    (module With_quickcheck_generator with type t = 'l and type comparator_witness = 'lc)
     -> (module With_quickcheck_generator
           with type t = 'r
            and type comparator_witness = 'rc)
@@ -122,13 +126,15 @@ module type Deriving = sig
 
   (** Used by [@@deriving quickcheck] *)
   val quickcheck_observer_m__t
-    :  (module With_quickcheck_observer with type t = 'l)
+    : 'l 'lc 'r 'rc.
+    (module With_quickcheck_observer with type t = 'l)
     -> (module With_quickcheck_observer with type t = 'r)
-    -> ('l, _, 'r, _) t Base_quickcheck.Observer.t
+    -> ('l, 'lc, 'r, 'rc) t Base_quickcheck.Observer.t
 
   (** Used by [@@deriving quickcheck] *)
   val quickcheck_shrinker_m__t
-    :  (module With_quickcheck_shrinker with type t = 'l)
+    : 'l 'lc 'r 'rc.
+    (module With_quickcheck_shrinker with type t = 'l)
     -> (module With_quickcheck_shrinker with type t = 'r)
-    -> ('l, _, 'r, _) t Base_quickcheck.Shrinker.t
+    -> ('l, 'lc, 'r, 'rc) t Base_quickcheck.Shrinker.t]
 end
