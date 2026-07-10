@@ -611,7 +611,10 @@ module _ : module type of Bidirectional_map = struct
           (not (Bidirectional_map.mem_binding t l r)))
   ;;
 
-  let quickcheck_generator_m__t = Bidirectional_map.quickcheck_generator_m__t
-  let quickcheck_observer_m__t = Bidirectional_map.quickcheck_observer_m__t
-  let quickcheck_shrinker_m__t = Bidirectional_map.quickcheck_shrinker_m__t
+  [%%template
+  [@@@mode.default p = (portable, nonportable)]
+
+  let quickcheck_generator_m__t = (Bidirectional_map.quickcheck_generator_m__t [@mode p])
+  let quickcheck_observer_m__t = (Bidirectional_map.quickcheck_observer_m__t [@mode p])
+  let quickcheck_shrinker_m__t = (Bidirectional_map.quickcheck_shrinker_m__t [@mode p])]
 end

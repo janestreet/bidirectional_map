@@ -257,8 +257,11 @@ include struct
   include struct
     open Base_quickcheck
 
+    [%%template
+    [@@@mode.default p = (portable, nonportable)]
+
     let quickcheck_generator_m__t
-      (type l lc r rc)
+      (type l (lc : value mod p) r (rc : value mod p))
       (module L : With_quickcheck_generator
         with type t = l
          and type comparator_witness = lc)
@@ -266,14 +269,16 @@ include struct
         with type t = r
          and type comparator_witness = rc)
       =
-      Generator.list (Generator.both L.quickcheck_generator R.quickcheck_generator)
-      |> Generator.map ~f:(fun alist ->
-        (* Generate a [t] with as many bindings from [alist] as possible, rather than
-           choosing a new alist if some bindings overlap. *)
-        List.fold
-          alist
-          ~init:(empty (module L) (module R))
-          ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
+      (Generator.map [@mode p])
+        ((Generator.list [@mode p])
+           ((Generator.both [@mode p]) L.quickcheck_generator R.quickcheck_generator))
+        ~f:(fun alist ->
+          (* Generate a [t] with as many bindings from [alist] as possible, rather than
+             choosing a new alist if some bindings overlap. *)
+          List.fold
+            alist
+            ~init:(empty (module L) (module R))
+            ~f:(fun t (l, r) -> add t l r |> Option.value ~default:t))
     ;;
 
     let quickcheck_observer_m__t
@@ -281,8 +286,10 @@ include struct
       (module L : With_quickcheck_observer with type t = l)
       (module R : With_quickcheck_observer with type t = r)
       =
-      Observer.list (Observer.both L.quickcheck_observer R.quickcheck_observer)
-      |> Observer.unmap ~f:to_alist
+      (Observer.unmap [@mode p])
+        ((Observer.list [@mode p])
+           ((Observer.both [@mode p]) L.quickcheck_observer R.quickcheck_observer))
+        ~f:to_alist
     ;;
 
     let quickcheck_shrinker_m__t
@@ -290,14 +297,14 @@ include struct
       (module L : With_quickcheck_shrinker with type t = l)
       (module R : With_quickcheck_shrinker with type t = r)
       =
-      Shrinker.both
-        Shrinker.atomic
-        (Shrinker.list (Shrinker.both L.quickcheck_shrinker R.quickcheck_shrinker))
-      |> Shrinker.map
-           ~f:(fun ((lc, rc), alist) -> of_alist lc rc alist)
-           ~f_inverse:(fun t ->
-             ( (Map.comparator_s t.left_to_right, Map.comparator_s t.right_to_left)
-             , to_alist t ))
-    ;;
+      (Shrinker.map [@mode p])
+        ((Shrinker.both [@mode p])
+           Shrinker.atomic
+           ((Shrinker.list [@mode p])
+              ((Shrinker.both [@mode p]) L.quickcheck_shrinker R.quickcheck_shrinker)))
+        ~f:(fun ((lc, rc), alist) -> of_alist lc rc alist)
+        ~f_inverse:(fun t ->
+          (Map.comparator_s t.left_to_right, Map.comparator_s t.right_to_left), to_alist t)
+    ;;]
   end
 end
